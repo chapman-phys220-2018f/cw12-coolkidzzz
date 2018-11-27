@@ -2,7 +2,7 @@
 
 # PHYS220/MATH220/CPSC220 CW 12
 
-**Author(s):** **Gabriella and Raha **
+**Author(s):** ** Gabriella and Raha **
 
 ## Specification
 
@@ -39,4 +39,4 @@ I pledge that all the work in this repository is my own with only the following 
 
 Signed,
 
-**Gabriella & Raha **
+** Gabriella & Raha **
