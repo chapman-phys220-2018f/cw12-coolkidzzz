@@ -9,26 +9,30 @@
 import numpy as np
 import sympy as sp
 import matplotlib.pyplot as plt
+import numba as nb
 
+@nb.jit
 def dxdt(x,y,t):
     """"""
     return y
 
+@nb.jit
 def dydt(x,y,t,F,v,w):
     """creates a function of the duffing oscillator"""
     
-    dv = -x**3+x-v*y + F*(np.cos(w*t))
+    dy = -x**3+x-v*y + F*(np.cos(w*t))
     return dy
 
-def r4(x0,y0,F,v=.25,w=1):
-    """function for 4th-order Runge-Kutta Method"""
-    dt = .001
-    t = np.arange(0,(2*np.pi),dt)
+@nb.jit
+def r4(x0,y0,F,v,w,t):
+    """function for 4th-order Runge-Kutta Method of Duffing Oscillator"""
+    dt = t[1]-t[0]
+    #t = np.arange(0,(2*np.pi),dt)
     x = np.zeros_like(t)
     x[0] = x0
     y = np.zeros_like(t)
     y[0] = y0
-    for i in range(0,len(t)):
+    for i in range(0,len(t)-1):
         K1x= dt*dxdt(x[i],y[i],t[i])
         K1y= dt*dydt(x[i],y[i],t[i],F,v,w)
 
@@ -40,8 +44,8 @@ def r4(x0,y0,F,v=.25,w=1):
 
         K4x = dt*dxdt(x[i]+K3x, y[i]+K3y, t[i] + dt)
         K4y = dt*dydt(x[i]+K3x, y[i]+K3y, t[i] + dt,F,v,w)
-        x[:,i]= x[:,i-1]+(K1+2*K2+2*K3+K4)/6
-        y[:,i]= y[:,i-1]+(K1+2*K2+2*K3+K4)/6
+        x[i+1]= x[i]+(K1x+2*K2x+2*K3x+K4x)/6
+        y[i+1]= y[i]+(K1y+2*K2y+2*K3y+K4y)/6
     return x,y
 
 def r4plot (x,y,t):
